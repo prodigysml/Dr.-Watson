@@ -124,52 +124,58 @@ class CustomScans:
                 offset[1] = start + len(ref)
                 offsets.append(offset)
 
-                core_domain = ref.split("//")[-1].split("/")[0].split('?')[0]
+                base_url = str(url).split("//")[-1].split("/")[0].split('?')[0]
 
                 # Create a ScanIssue object and append it to our list of issues, marking
                 # the matched value in the response.
 
+                # create individual classes per unique asset class
+
+                if not self.check_unique(base_url, ref):
+                    continue
+
                 if (issuename == "Asset Discovered: IP"):
-                    print "IP: "+ref
+                    print "IP: "+ ref
                     scan_issues.append(ScanIssue(self._requestResponse.getHttpService(),
                         self._helpers.analyzeRequest(self._requestResponse).getUrl(),
                         [self._callbacks.applyMarkers(self._requestResponse, None, offsets)],
                         issuename, issuelevel, issuedetail.replace("$asset$", ref)))
                 elif (issuename == "Asset Discovered: Domain"):
-                    ref = core_domain
-                    print "Domain: "+ref
+                    ref = ref.split("//")[-1].split("/")[0].split('?')[0]
+                    if ref.endswith("." + self._get_core_domain(url)):
+                        continue
+                    print "Domain: "+ ref
                     scan_issues.append(ScanIssue(self._requestResponse.getHttpService(),
                         self._helpers.analyzeRequest(self._requestResponse).getUrl(),
                         [self._callbacks.applyMarkers(self._requestResponse, None, offsets)],
                         issuename, issuelevel, issuedetail.replace("$asset$", ref)))
                 elif (issuename == "Asset Discovered: Subdomain"):
-                    ref=ref.split("//")[-1].split("/")[0].split('?')[0]
-                    domain = str(url).split("//")[-1].split(":")[0].split('?')[0]
-                    coredomain = str(domain).rsplit('.')[-2]+"."+str(domain).rsplit('.')[-1]
-                    if not coredomain in ref or ref==coredomain:
+                    ref = ref.split("//")[-1].split("/")[0].split('?')[0]
+                    coredomain = self._get_core_domain(url)
+                    if not ref.endswith("." + coredomain) or ref == coredomain:
                         continue
-                    print "Subdomain: "+ref
+                    print "Subdomain: " + ref
                     scan_issues.append(ScanIssue(self._requestResponse.getHttpService(),
                         self._helpers.analyzeRequest(self._requestResponse).getUrl(),
                         [self._callbacks.applyMarkers(self._requestResponse, None, offsets)],
                         issuename, issuelevel, issuedetail.replace("$asset$", ref)))
                 elif (issuename == "Asset Discovered: S3 Bucket"):
-                    ref=ref.split(" ")[0].split('/')[2].split('.')[0]
-                    print "S3 Bucket: "+ref
+                    ref = ref.split(" ")[0].split('/')[2].split('.')[0]
+                    print "S3 Bucket: " + ref
                     scan_issues.append(ScanIssue(self._requestResponse.getHttpService(),
                         self._helpers.analyzeRequest(self._requestResponse).getUrl(),
                         [self._callbacks.applyMarkers(self._requestResponse, None, offsets)],
                         issuename, issuelevel, issuedetail.replace("$asset$", ref)))
                 elif (issuename == "Asset Discovered: DigitalOcean Space"):
-                    ref=ref.split('/')[2].split('.')[0]
-                    print "DigitalOcean Space: "+ref
+                    ref = ref.split('/')[2].split('.')[0]
+                    print "DigitalOcean Space: " + ref
                     scan_issues.append(ScanIssue(self._requestResponse.getHttpService(),
                         self._helpers.analyzeRequest(self._requestResponse).getUrl(),
                         [self._callbacks.applyMarkers(self._requestResponse, None, offsets)],
                         issuename, issuelevel, issuedetail.replace("$asset$", ref)))
                 elif (issuename == "Asset Discovered: Azure Blob"):
-                    ref=ref.split(" ")[0].split('/')[2].split(".")[0]+":"+ref.split(" ")[0].split('/')[3]
-                    print "Azure Blob: "+ref
+                    ref = ref.split(" ")[0].split('/')[2].split(".")[0]+":"+ref.split(" ")[0].split('/')[3]
+                    print "Azure Blob: " + ref
                     scan_issues.append(ScanIssue(self._requestResponse.getHttpService(),
                         self._helpers.analyzeRequest(self._requestResponse).getUrl(),
                         [self._callbacks.applyMarkers(self._requestResponse, None, offsets)],
@@ -177,14 +183,23 @@ class CustomScans:
 
         return (scan_issues)
 
+    def _get_core_domain(self, url):
+        domain = str(url).split("//")[-1].split(":")[0].split('?')[0]
+        return str(domain).rsplit('.')[-2]+"."+str(domain).rsplit('.')[-1]
+
     def check_unique(self, core, ref):
-        if ref in CustomScans.unique_list[core]:
-            return False
-        else:
-            if core in CustomScans.unique_list.keys():
-                CustomScans[core].append(ref)
+        try:
+            if ref in CustomScans.unique_list[core]:
+                return False
             else:
-                CustomScans[core] = [ref]
+                if core in CustomScans.unique_list.keys():
+                    CustomScans[core].append(ref)
+                    return True
+                else:
+                    CustomScans[core] = [ref]
+                return True
+        except:
+            return True
 
 # Implementation of the IScanIssue interface with simple constructor and getter methods
 class ScanIssue(IScanIssue):
