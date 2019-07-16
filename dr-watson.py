@@ -2,6 +2,8 @@
 # By: Sajeeb Lohani (sml555)
 # Twitter: https://twitter.com/sml555_
 
+# todo: fix dups better, add in api secrets, add in more JS parsing
+
 # Code Credits:
 # Redhunt Labs for making the original asset discovery plugin
 # OpenSecurityResearch CustomPassiveScanner: https://github.com/OpenSecurityResearch/CustomPassiveScanner
@@ -65,10 +67,6 @@ class BurpExtender(IBurpExtender, IScannerCheck):
         for issue in self.library:
             scan_issues += self._CustomScans.findRegEx(issue[0], issue[1], issue[2], issue[3])
 
-            scan_issues += tmp_issues
-
-            tmp_issues = list()
-
         # Finally, per the interface contract, doPassiveScan needs to return a
         # list of scan issues, if any, and None otherwise
         if len(scan_issues) > 0:
@@ -77,6 +75,7 @@ class BurpExtender(IBurpExtender, IScannerCheck):
             return None
 
 class CustomScans:
+    unique_list = dict()
     def __init__(self, requestResponse, callbacks):
         # Set class variables with the arguments passed to the constructor
         self._requestResponse = requestResponse
@@ -125,6 +124,7 @@ class CustomScans:
                 offset[1] = start + len(ref)
                 offsets.append(offset)
 
+                core_domain = ref.split("//")[-1].split("/")[0].split('?')[0]
 
                 # Create a ScanIssue object and append it to our list of issues, marking
                 # the matched value in the response.
@@ -136,7 +136,7 @@ class CustomScans:
                         [self._callbacks.applyMarkers(self._requestResponse, None, offsets)],
                         issuename, issuelevel, issuedetail.replace("$asset$", ref)))
                 elif (issuename == "Asset Discovered: Domain"):
-                    ref=ref.split("//")[-1].split("/")[0].split('?')[0]
+                    ref = core_domain
                     print "Domain: "+ref
                     scan_issues.append(ScanIssue(self._requestResponse.getHttpService(),
                         self._helpers.analyzeRequest(self._requestResponse).getUrl(),
@@ -176,6 +176,15 @@ class CustomScans:
                         issuename, issuelevel, issuedetail.replace("$asset$", ref)))
 
         return (scan_issues)
+
+    def check_unique(self, core, ref):
+        if ref in CustomScans.unique_list[core]:
+            return False
+        else:
+            if core in CustomScans.unique_list.keys():
+                CustomScans[core].append(ref)
+            else:
+                CustomScans[core] = [ref]
 
 # Implementation of the IScanIssue interface with simple constructor and getter methods
 class ScanIssue(IScanIssue):
