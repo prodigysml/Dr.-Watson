@@ -13,6 +13,7 @@ from burp import IScannerCheck
 from burp import IScanIssue
 from array import array
 import re
+import json
 
 # Implement BurpExtender to inherit from multiple base classes
 # IBurpExtender is the base class required for all extensions
@@ -33,6 +34,14 @@ class BurpExtender(IBurpExtender, IScannerCheck):
         # to perform active or passive scanning and report on scan issues returned
         self._callbacks.registerScannerCheck(self)
 
+        library_file = open("issues_library.json")
+        library_file = library_file.read()
+
+        self.library = json.loads(library_file)
+
+        print(self.library[4][0])
+        print("http(?:s)://[^><\.\'\" \n\)]+.[^><\.\'\" \n\)]+.[^><\.\'\" \n\)]+.digitaloceanspaces.com")
+
         return
 
     # This method is called when multiple issues are reported for the same URL
@@ -49,109 +58,19 @@ class BurpExtender(IBurpExtender, IScannerCheck):
     # Burp Scanner invokes this method for each base request/response that is passively scanned.
     def doPassiveScan(self, baseRequestResponse):
         # Local variables used to store a list of ScanIssue objects
-        scan_issues = []
-        tmp_issues = []
+        scan_issues = list()
+        tmp_issues = list()
 
         # Create an instance of our CustomScans object, passing the
         # base request and response, and our callbacks object
         self._CustomScans = CustomScans(baseRequestResponse, self._callbacks)
 
+        for issue in self.library:
+            scan_issues += self._CustomScans.findRegEx(issue[0], issue[1], issue[2], issue[3])
 
-        # Call the findRegEx method of our CustomScans object to check
-        # the response for anything matching a specified regular expression
-        # This one matches an IP
-        regex = "(?:[\d]{1,3})\.(?:[\d]{1,3})\.(?:[\d]{1,3})\.(?:[\d]{1,3})"
-        issuename = "Asset Discovered: IP"
-        issuelevel = "Information"
-        issuedetail = """IP Discovered: <b>$asset$</b>
-                         <br><br><b>Note:</b> Before performing any active assessment of the identified asset, please check with the owner. The asset might not be owned by the same owner/organizaion or part of the scope."""
+            scan_issues += tmp_issues
 
-        tmp_issues = self._CustomScans.findRegEx(regex, issuename, issuelevel, issuedetail)
-
-        # Add the issues from findRegEx to the list of issues to be returned
-        scan_issues = scan_issues + tmp_issues
-
-        tmp_issues = []
-
-        # Call the findRegEx method of our CustomScans object to check
-        # the response for anything matching a specified regular expression
-        # This one matches a URL - domain
-        regex = "http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))[^><\'\" \n)]+"
-        issuename = "Asset Discovered: Domain"
-        issuelevel = "Information"
-        issuedetail = """Domain Discovered: <b>$asset$</b>
-                         <br><br><b>Note:</b> Before performing any active assessment of the identified asset, please check with the owner. The asset might not be owned by the same owner/organizaion or part of the scope."""
-
-        tmp_issues = self._CustomScans.findRegEx(regex, issuename, issuelevel, issuedetail)
-
-        # Add the issues from findRegEx to the list of issues to be returned
-        scan_issues = scan_issues + tmp_issues
-
-        tmp_issues = []
-
-        # Call the findRegEx method of our CustomScans object to check
-        # the response for anything matching a specified regular expression
-        # This one matches a URL - subdomain
-
-        regex = "http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))[^><\'\" \n)]+"
-        issuename = "Asset Discovered: Subdomain"
-        issuelevel = "Information"
-        issuedetail = """Subdomain Discovered: <b>$asset$</b>
-                         <br><br><b>Note:</b> Before performing any active assessment of the identified asset, please check with the owner. The asset might not be owned by the same owner/organizaion or part of the scope."""
-
-        tmp_issues = self._CustomScans.findRegEx(regex, issuename, issuelevel, issuedetail)
-
-        # Add the issues from findRegEx to the list of issues to be returned
-        scan_issues = scan_issues + tmp_issues
-
-        tmp_issues = []
-
-        # Call the findRegEx method of our CustomScans object to check
-        # the response for anything matching a specified regular expression
-        # This one matches a S3 Bucket URL
-        regex = "(http(?:s)?://.[^><\'\" \n\)]+.s3.amazonaws.com|\))/"
-        issuename = "Asset Discovered: S3 Bucket"
-        issuelevel = "Information"
-        issuedetail = """S3 Bucket Discovered: <b>$asset$</b>
-                         <br><br><b>Note:</b> Before performing any active assessment of the identified asset, please check with the owner. The asset might not be owned by the same owner/organizaion or part of the scope."""
-
-        tmp_issues = self._CustomScans.findRegEx(regex, issuename, issuelevel, issuedetail)
-
-        # Add the issues from findRegEx to the list of issues to be returned
-        scan_issues = scan_issues + tmp_issues
-
-        tmp_issues = []
-
-        # Call the findRegEx method of our CustomScans object to check
-        # the response for anything matching a specified regular expression
-        # This one matches a DigitalOcean Space URL
-        regex = "http(?:s)://[^><\.\'\" \n\)]+.[^><\.\'\" \n\)]+.[^><\.\'\" \n\)]+.digitaloceanspaces.com"
-        issuename = "Asset Discovered: DigitalOcean Space"
-        issuelevel = "Information"
-        issuedetail = """DigitalOcean Space Discovered: <b>$asset$</b>
-                         <br><br><b>Note:</b> Before performing any active assessment of the identified asset, please check with the owner. The asset might not be owned by the same owner/organizaion or part of the scope."""
-
-        tmp_issues = self._CustomScans.findRegEx(regex, issuename, issuelevel, issuedetail)
-
-        # Add the issues from findRegEx to the list of issues to be returned
-        scan_issues = scan_issues + tmp_issues
-
-        tmp_issues = []
-
-        # Call the findRegEx method of our CustomScans object to check
-        # the response for anything matching a specified regular expression
-        # This one matches a Azure Blob URL
-        regex = "http(?:s)://.[^><\'\" \n\)]+.blob.core.windows.net/.[^><\'\" \n/)]+./"
-        issuename = "Asset Discovered: Azure Blob"
-        issuelevel = "Information"
-        issuedetail = """Azure Blob Discovered: <b>$asset$</b>
-                         <br><br><b>Note:</b> Before performing any active assessment of the identified asset, please check with the owner. The asset might not be owned by the same owner/organizaion or part of the scope."""
-
-        tmp_issues = self._CustomScans.findRegEx(regex, issuename, issuelevel, issuedetail)
-
-        # Add the issues from findRegEx to the list of issues to be returned
-        scan_issues = scan_issues + tmp_issues
-
+            tmp_issues = list()
 
         # Finally, per the interface contract, doPassiveScan needs to return a
         # list of scan issues, if any, and None otherwise
