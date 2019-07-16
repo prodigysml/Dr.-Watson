@@ -39,9 +39,6 @@ class BurpExtender(IBurpExtender, IScannerCheck):
 
         self.library = json.loads(library_file)
 
-        print(self.library[4][0])
-        print("http(?:s)://[^><\.\'\" \n\)]+.[^><\.\'\" \n\)]+.[^><\.\'\" \n\)]+.digitaloceanspaces.com")
-
         return
 
     # This method is called when multiple issues are reported for the same URL
@@ -84,6 +81,7 @@ class CustomScans:
         # Set class variables with the arguments passed to the constructor
         self._requestResponse = requestResponse
         self._callbacks = callbacks
+        self.force_check_all = True
 
         # Get an instance of IHelpers, which has lots of useful methods, as a class
         # variable, so we have class-level scope to all the helper methods
@@ -103,11 +101,10 @@ class CustomScans:
 
         # Only check responses for 'in scope' URLs
 
-        if self._callbacks.isInScope(self._helpers.analyzeRequest(self._requestResponse).getUrl()):
+        if self._callbacks.isInScope(self._helpers.analyzeRequest(self._requestResponse).getUrl()) or self.force_check_all:
 
             # Compile the regular expression, telling Python to ignore EOL/LF
             myre = re.compile(regex, re.DOTALL)
-
 
             # Using the regular expression, find all occurrences in the base response
             match_vals = myre.findall(self._helpers.bytesToString(response))
