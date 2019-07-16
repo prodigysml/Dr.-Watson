@@ -160,21 +160,25 @@ class CustomScans:
                         [self._callbacks.applyMarkers(self._requestResponse, None, offsets)],
                         issuename, issuelevel, issuedetail.replace("$asset$", ref)))
                 elif (issuename == "Asset Discovered: S3 Bucket"):
-                    ref = ref.split(" ")[0].split('/')[2].split('.')[0]
-                    print "S3 Bucket: " + ref
-                    scan_issues.append(ScanIssue(self._requestResponse.getHttpService(),
-                        self._helpers.analyzeRequest(self._requestResponse).getUrl(),
-                        [self._callbacks.applyMarkers(self._requestResponse, None, offsets)],
-                        issuename, issuelevel, issuedetail.replace("$asset$", ref)))
+                    try:
+                        # getting the S3 bucket name and catch exception if regex catches incorrect data
+                        ref = ref.split(" ")[0].split('/')[2]
+                        print "S3 Bucket: " + ref
+                        scan_issues.append(ScanIssue(self._requestResponse.getHttpService(),
+                            self._helpers.analyzeRequest(self._requestResponse).getUrl(),
+                            [self._callbacks.applyMarkers(self._requestResponse, None, offsets)],
+                            issuename, issuelevel, issuedetail.replace("$asset$", ref)))
+                    except:
+                        continue
                 elif (issuename == "Asset Discovered: DigitalOcean Space"):
-                    ref = ref.split('/')[2].split('.')[0]
+                    ref = ref.split('/')[2]
                     print "DigitalOcean Space: " + ref
                     scan_issues.append(ScanIssue(self._requestResponse.getHttpService(),
                         self._helpers.analyzeRequest(self._requestResponse).getUrl(),
                         [self._callbacks.applyMarkers(self._requestResponse, None, offsets)],
                         issuename, issuelevel, issuedetail.replace("$asset$", ref)))
                 elif (issuename == "Asset Discovered: Azure Blob"):
-                    ref = ref.split(" ")[0].split('/')[2].split(".")[0]+":"+ref.split(" ")[0].split('/')[3]
+                    ref = ref.split(" ")[0].split('/')[2] + ":" + ref.split(" ")[0].split('/')[3]
                     print "Azure Blob: " + ref
                     scan_issues.append(ScanIssue(self._requestResponse.getHttpService(),
                         self._helpers.analyzeRequest(self._requestResponse).getUrl(),
