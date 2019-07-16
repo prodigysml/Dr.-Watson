@@ -150,7 +150,6 @@ class CustomScans:
                         continue
                 elif (issuename == "Asset Discovered: DigitalOcean Space"):
                     ref = ref.split('/')[2]
-                    print "DigitalOcean Space: " + ref
 
                 elif (issuename == "Asset Discovered: Azure Blob"):
                     ref = ref.split(" ")[0].split('/')[2] + ":" + ref.split(" ")[0].split('/')[3]
