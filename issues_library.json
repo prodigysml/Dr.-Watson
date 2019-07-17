@@ -58,5 +58,17 @@
         "Asset Discovered: PGP Private Key",
         "High",
         "PGP Private Key Discovered: <b>$asset$</b><br><br><b>Note:</b> Before performing any active assessment of the identified asset, please check with the owner. The asset might not be owned by the same owner/organizaion or part of the scope."
+	],
+	[
+		"X-Octopus-ApiKey",
+        "Asset Discovered: Octopus API Key",
+        "Medium",
+        "Octopus API Key Discovered: <b>$asset$</b><br><br><b>Note:</b> Before performing any active assessment of the identified asset, please check with the owner. The asset might not be owned by the same owner/organizaion or part of the scope."
+	],
+	[
+		"X-NuGet-ApiKey",
+        "Asset Discovered: NuGet API Key",
+        "Medium",
+        "NuGet API Key Discovered: <b>$asset$</b><br><br><b>Note:</b> Before performing any active assessment of the identified asset, please check with the owner. The asset might not be owned by the same owner/organizaion or part of the scope."
 	]
 ]
