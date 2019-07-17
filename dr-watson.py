@@ -25,7 +25,7 @@ class BurpExtender(IBurpExtender, IScannerCheck):
     # The only method of the IBurpExtender interface.
     # This method is invoked when the extension is loaded and registers
     # an instance of the IBurpExtenderCallbacks interface
-    def	registerExtenderCallbacks(self, callbacks):
+    def registerExtenderCallbacks(self, callbacks):
         # Put the callbacks parameter into a class variable so we have class-level scope
         self._callbacks = callbacks
 
@@ -100,7 +100,7 @@ class CustomScans:
 
         # Only check responses for 'in scope' URLs
 
-        if self._callbacks.isInScope(self._helpers.analyzeRequest(self._requestResponse).getUrl()) or self.force_check_all:
+        if self._callbacks.isInScope(self._helpers.analyzeRequest(self._requestResponse).getUrl()):
 
             # Compile the regular expression, telling Python to ignore EOL/LF
             myre = re.compile(regex, re.DOTALL)
