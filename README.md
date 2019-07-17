@@ -2,6 +2,10 @@
 
 Dr. Watson is a simple Burp Suite extension that helps find assets, keys, subdomains, IP addresses, and other useful information! It's your very own discovery side kick, the Dr. Watson to your Sherlock! 
 
+# How Does Dr. Watson Work?
+
+Dr. Watson takes regexes from the issues_library.json file and attempts to match said regexes with responses within Burp Suite. Once it matches a regex, it raises an issue with the severity defined in the config, as a finding for the target host. It is simple, sweet, and easy to use! 
+
 # Setup - Installing for Burp Suite Pro
 ## Setting Up Jython
 1. Download the latest standalone version of [jython](https://www.jython.org/downloads.html)
@@ -24,4 +28,4 @@ Originally written by Sajeeb Lohani (sml555). I would like to thank the followin
 * TruffleHog Regexes and git-all-secrets for the regexes
 
 # Contributions
-Contributions to this project are very welcome. If you're a newcomer to open source and would like some help in doing so, feel free to reach out to me on twitter (@sml555_) and I'll assist wherever I can.
+Contributions to this project are very welcome. If you're a newcomer to open source and would like some help in doing so, feel free to reach out to me on twitter (@sml555_) and I'll assist wherever I can. 
