@@ -34,5 +34,29 @@
         "Asset Discovered: Azure Blob",
         "Information",
         "Azure Blob Discovered: <b>$asset$</b><br><br><b>Note:</b> Before performing any active assessment of the identified asset, please check with the owner. The asset might not be owned by the same owner/organizaion or part of the scope."
+	],
+	[
+		"-----BEGIN RSA PRIVATE KEY-----",
+        "Asset Discovered: RSA Private Key",
+        "High",
+        "RSA Private Key Discovered: <b>$asset$</b><br><br><b>Note:</b> Before performing any active assessment of the identified asset, please check with the owner. The asset might not be owned by the same owner/organizaion or part of the scope."
+	],
+	[
+		"-----BEGIN DSA PRIVATE KEY-----",
+        "Asset Discovered: DSA Private Key",
+        "High",
+        "DSA Private Key Discovered: <b>$asset$</b><br><br><b>Note:</b> Before performing any active assessment of the identified asset, please check with the owner. The asset might not be owned by the same owner/organizaion or part of the scope."
+	],
+	[
+		"-----BEGIN EC PRIVATE KEY-----",
+        "Asset Discovered: EC Private Key",
+        "High",
+        "EC Private Key Discovered: <b>$asset$</b><br><br><b>Note:</b> Before performing any active assessment of the identified asset, please check with the owner. The asset might not be owned by the same owner/organizaion or part of the scope."
+	],
+	[
+		"-----BEGIN PGP PRIVATE KEY BLOCK-----",
+        "Asset Discovered: PGP Private Key",
+        "High",
+        "PGP Private Key Discovered: <b>$asset$</b><br><br><b>Note:</b> Before performing any active assessment of the identified asset, please check with the owner. The asset might not be owned by the same owner/organizaion or part of the scope."
 	]
 ]
