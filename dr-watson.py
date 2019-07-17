@@ -80,7 +80,6 @@ class CustomScans:
         # Set class variables with the arguments passed to the constructor
         self._requestResponse = requestResponse
         self._callbacks = callbacks
-        self.force_check_all = True
 
         # Get an instance of IHelpers, which has lots of useful methods, as a class
         # variable, so we have class-level scope to all the helper methods
