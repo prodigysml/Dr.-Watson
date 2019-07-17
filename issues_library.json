@@ -70,5 +70,35 @@
         "Asset Discovered: NuGet API Key",
         "Medium",
         "NuGet API Key Discovered: <b>$asset$</b><br><br><b>Note:</b> Before performing any active assessment of the identified asset, please check with the owner. The asset might not be owned by the same owner/organizaion or part of the scope."
+	],
+	[
+		"(xox[p|b|o|a]-[0-9]{12}-[0-9]{12}-[0-9]{12}-[a-z0-9]{32})",
+        "Asset Discovered: Slack token",
+        "Medium",
+        "Slack token Discovered: <b>$asset$</b><br><br><b>Note:</b> Before performing any active assessment of the identified asset, please check with the owner. The asset might not be owned by the same owner/organizaion or part of the scope."
+	],
+	[
+		"[AKIA|AAGA|ACCA|AGPA|AIDA|AIPA|ANPA|ANVA|APKA|AROA|ASCA|ASIA][0-9A-Z]{16}",
+        "Asset Discovered: AWS Access Key ID",
+        "Medium",
+        "AWS Access Key ID Discovered: <b>$asset$</b><br><br><b>Note:</b> Before performing any active assessment of the identified asset, please check with the owner. The asset might not be owned by the same owner/organizaion or part of the scope."
+	],
+	[
+		"[AKIA|AAGA|ACCA|AGPA|AIDA|AIPA|ANPA|ANVA|APKA|AROA|ASCA|ASIA][0-9A-Z]{16}",
+        "Asset Discovered: AWS Access Key ID",
+        "High",
+        "AWS Access Key ID Discovered: <b>$asset$</b><br><br><b>Note:</b> Before performing any active assessment of the identified asset, please check with the owner. The asset might not be owned by the same owner/organizaion or part of the scope."
+	],
+	[
+		"[AccessKeyId|aws_access_key_id]",
+        "Asset Discovered: AWS Access Key ID",
+        "High",
+        "AWS Access Key ID Discovered: <b>$asset$</b><br><br><b>Note:</b> Before performing any active assessment of the identified asset, please check with the owner. The asset might not be owned by the same owner/organizaion or part of the scope."
+	],
+	[
+		"[SecretAccessKey|aws_secret_access_key]",
+        "Asset Discovered: AWS Secret Access Key ID",
+        "High",
+        "AWS Secret Access Key ID Discovered: <b>$asset$</b><br><br><b>Note:</b> Before performing any active assessment of the identified asset, please check with the owner. The asset might not be owned by the same owner/organizaion or part of the scope."
 	]
 ]
