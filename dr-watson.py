@@ -64,6 +64,15 @@ class BurpExtender(IBurpExtender, IScannerCheck):
         # base request and response, and our callbacks object
         self._CustomScans = CustomScans(baseRequestResponse, self._callbacks)
 
+        mime_type = str(self._CustomScans.response.getStatedMimeType())
+
+        # purposely not including SVG in case any interesting information is found
+        image_types = ["GIF", "JPEG", "PNG", "image"]
+
+        if mime_type in image_types:
+            return None 
+        print(mime_type)
+
         for issue in self.library:
             scan_issues += self._CustomScans.findRegEx(issue[0], issue[1], issue[2], issue[3])
 
@@ -84,6 +93,8 @@ class CustomScans:
         # Get an instance of IHelpers, which has lots of useful methods, as a class
         # variable, so we have class-level scope to all the helper methods
         self._helpers = self._callbacks.getHelpers()
+
+        self.response = self._helpers.analyzeResponse(requestResponse.getResponse())
 
         # Put the parameters from the HTTP message in a class variable so we have class-level scope
         self._params = self._helpers.analyzeRequest(requestResponse.getRequest()).getParameters()
