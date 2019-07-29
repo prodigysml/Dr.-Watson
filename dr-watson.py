@@ -146,6 +146,20 @@ class CustomScans:
                     if ref.endswith("." + self._get_core_domain(url)):
                         continue
 
+                elif (issuename == "Asset Discovered: IP"):
+                    ref_array = ref.split(".")
+                    must_continue = False
+                    for i in ref_array:
+                        if int(i) > 255 or int(i) < 0:
+                            must_continue = True
+                            break
+
+                    if ref_array[0] == "0":
+                        continue
+                        
+                    if must_continue:
+                        continue
+
                 elif (issuename == "Asset Discovered: Subdomain"):
                     ref = ref.split("//")[-1].split("/")[0].split('?')[0]
                     coredomain = self._get_core_domain(url)
