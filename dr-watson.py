@@ -85,6 +85,7 @@ class BurpExtender(IBurpExtender, IScannerCheck):
 
 class CustomScans:
     unique_list = dict()
+    regexes_compiled = dict()
     def __init__(self, requestResponse, callbacks):
         # Set class variables with the arguments passed to the constructor
         self._requestResponse = requestResponse
@@ -113,7 +114,12 @@ class CustomScans:
         if self._callbacks.isInScope(self._helpers.analyzeRequest(self._requestResponse).getUrl()):
 
             # Compile the regular expression, telling Python to ignore EOL/LF
-            myre = re.compile(regex, re.DOTALL)
+            # NOTE: testing required significantly here!
+            if CustomScans.regexes_compiled.has_key(regex):
+                myre = regexes_compiled[regex]
+            else:
+                myre = re.compile(regex, re.DOTALL)
+                CustomScans.regexes_compiled[regex] = myre
 
             # Using the regular expression, find all occurrences in the base response
             match_vals = myre.findall(self._helpers.bytesToString(response))
@@ -156,7 +162,7 @@ class CustomScans:
 
                     if ref_array[0] == "0":
                         continue
-                        
+
                     if must_continue:
                         continue
 
