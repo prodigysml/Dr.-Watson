@@ -116,7 +116,7 @@ class CustomScans:
             # Compile the regular expression, telling Python to ignore EOL/LF
             # NOTE: testing required significantly here!
             if CustomScans.regexes_compiled.has_key(regex):
-                myre = regexes_compiled[regex]
+                myre = CustomScans.regexes_compiled[regex]
             else:
                 myre = re.compile(regex, re.DOTALL)
                 CustomScans.regexes_compiled[regex] = myre
@@ -156,7 +156,9 @@ class CustomScans:
                     ref_array = ref.split(".")
                     must_continue = False
                     for i in ref_array:
-                        if int(i) > 255 or int(i) < 0:
+                        # checks to see if 0 is in front of the ip number, 
+                        # > 255 or < 0
+                        if int(i) > 255 or int(i) < 0 or i != str(int(i)):
                             must_continue = True
                             break
 
