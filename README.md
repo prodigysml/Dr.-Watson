@@ -10,7 +10,7 @@ Dr. Watson takes regexes from the issues_library.json file and attempts to match
 
 # Setup - Installing for Burp Suite Pro
 ## Setting Up Jython
-1. Download the latest standalone version of [jython](https://www.jython.org/downloads.html)
+1. Download the latest standalone version of [jython](https://www.jython.org/download)
 2. Navigate to Extender -> Options
 3. Navigate to the "Python Environment" section
 4. Click "Select File" and select the previously downloaded file
