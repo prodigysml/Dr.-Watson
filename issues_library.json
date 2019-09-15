@@ -1,92 +1,92 @@
 [
-	[
-		"(?:[\\d]{1,3})\\.(?:[\\d]{1,3})\\.(?:[\\d]{1,3})\\.(?:[\\d]{1,3})",
-		"Asset Discovered: IP",
+    [
+        "(?:[\\d]{1,3})\\.(?:[\\d]{1,3})\\.(?:[\\d]{1,3})\\.(?:[\\d]{1,3})",
+        "Asset Discovered: IP",
         "Information",
         "IP Discovered: <b>$asset$</b><br><br><b>Note:</b> Before performing any active assessment of the identified asset, please check with the owner. The asset might not be owned by the same owner/organizaion or part of the scope."
-	],
-	[
-		"http[s]?:\/\/(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))[^><'\" \n)]+",
+    ],
+    [
+        "http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))[^><'\" \n)]+",
         "Asset Discovered: Domain",
         "Information",
         "Domain Discovered: <b>$asset$</b><br><br><b>Note:</b> Before performing any active assessment of the identified asset, please check with the owner. The asset might not be owned by the same owner/organizaion or part of the scope."
-	],
-	[
-		"http[s]?:\/\/(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))[^><'\" \n)]+",
+    ],
+    [
+        "http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))[^><'\" \n)]+",
         "Asset Discovered: Subdomain",
         "Information",
         "Subdomain Discovered: <b>$asset$</b><br><br><b>Note:</b> Before performing any active assessment of the identified asset, please check with the owner. The asset might not be owned by the same owner/organizaion or part of the scope."
-	],
-	[
-		"(http(?:s)?://.[^><\\'\\\" \\n\\)]+.s3.amazonaws.com|\\))",
+    ],
+    [
+        "(http(?:s)?://.[^><\\'\\\" \\n\\)]+.s3.amazonaws.com|\\))",
         "Asset Discovered: S3 Bucket",
         "Information",
         "S3 Bucket Discovered: <b>$asset$</b><br><br><b>Note:</b> Before performing any active assessment of the identified asset, please check with the owner. The asset might not be owned by the same owner/organizaion or part of the scope."
-	],
-	[
-		"http(?:s):\/\/[^><\\.'\" \n\\)]+.[^><\\.'\" \n\\)]+.[^><\\.'\" \n\\)]+.digitaloceanspaces.com",
+    ],
+    [
+        "http(?:s)://[^><\\.'\" \n\\)]+.[^><\\.'\" \n\\)]+.[^><\\.'\" \n\\)]+.digitaloceanspaces.com",
         "Asset Discovered: DigitalOcean Space",
         "Information",
         "DigitalOcean Space Discovered: <b>$asset$</b><br><br><b>Note:</b> Before performing any active assessment of the identified asset, please check with the owner. The asset might not be owned by the same owner/organizaion or part of the scope."
-	],
-	[
-		"http(?:s):\/\/.[^><'\" \n\\)]+.blob.core.windows.net/.[^><'\" \n/)]+./",
+    ],
+    [
+        "http(?:s)://.[^><'\" \n\\)]+.blob.core.windows.net/.[^><'\" \n/)]+./",
         "Asset Discovered: Azure Blob",
         "Information",
         "Azure Blob Discovered: <b>$asset$</b><br><br><b>Note:</b> Before performing any active assessment of the identified asset, please check with the owner. The asset might not be owned by the same owner/organizaion or part of the scope."
-	],
-	[
-		"-----BEGIN RSA PRIVATE KEY-----",
+    ],
+    [
+        "-----BEGIN RSA PRIVATE KEY-----",
         "Asset Discovered: RSA Private Key",
         "High",
         "RSA Private Key Discovered: <b>$asset$</b><br><br><b>Note:</b> Before performing any active assessment of the identified asset, please check with the owner. The asset might not be owned by the same owner/organizaion or part of the scope."
-	],
-	[
-		"-----BEGIN DSA PRIVATE KEY-----",
+    ],
+    [
+        "-----BEGIN DSA PRIVATE KEY-----",
         "Asset Discovered: DSA Private Key",
         "High",
         "DSA Private Key Discovered: <b>$asset$</b><br><br><b>Note:</b> Before performing any active assessment of the identified asset, please check with the owner. The asset might not be owned by the same owner/organizaion or part of the scope."
-	],
-	[
-		"-----BEGIN EC PRIVATE KEY-----",
+    ],
+    [
+        "-----BEGIN EC PRIVATE KEY-----",
         "Asset Discovered: EC Private Key",
         "High",
         "EC Private Key Discovered: <b>$asset$</b><br><br><b>Note:</b> Before performing any active assessment of the identified asset, please check with the owner. The asset might not be owned by the same owner/organizaion or part of the scope."
-	],
-	[
-		"-----BEGIN PGP PRIVATE KEY BLOCK-----",
+    ],
+    [
+        "-----BEGIN PGP PRIVATE KEY BLOCK-----",
         "Asset Discovered: PGP Private Key",
         "High",
         "PGP Private Key Discovered: <b>$asset$</b><br><br><b>Note:</b> Before performing any active assessment of the identified asset, please check with the owner. The asset might not be owned by the same owner/organizaion or part of the scope."
-	],
-	[
-		"X-Octopus-ApiKey",
+    ],
+    [
+        "X-Octopus-ApiKey",
         "Asset Discovered: Octopus API Key",
         "Medium",
         "Octopus API Key Discovered: <b>$asset$</b><br><br><b>Note:</b> Before performing any active assessment of the identified asset, please check with the owner. The asset might not be owned by the same owner/organizaion or part of the scope."
-	],
-	[
-		"X-NuGet-ApiKey",
+    ],
+    [
+        "X-NuGet-ApiKey",
         "Asset Discovered: NuGet API Key",
         "Medium",
         "NuGet API Key Discovered: <b>$asset$</b><br><br><b>Note:</b> Before performing any active assessment of the identified asset, please check with the owner. The asset might not be owned by the same owner/organizaion or part of the scope."
-	],
-	[
-		"(xox[p|b|o|a]-[0-9]{12}-[0-9]{12}-[0-9]{12}-[a-z0-9]{32})",
+    ],
+    [
+        "(xox[p|b|o|a]-[0-9]{12}-[0-9]{12}-[0-9]{12}-[a-z0-9]{32})",
         "Asset Discovered: Slack token",
         "Medium",
         "Slack token Discovered: <b>$asset$</b><br><br><b>Note:</b> Before performing any active assessment of the identified asset, please check with the owner. The asset might not be owned by the same owner/organizaion or part of the scope."
-	],
-	[
-		"(AccessKeyId|aws_access_key_id)",
+    ],
+    [
+        "(AccessKeyId|aws_access_key_id)",
         "Asset Discovered: AWS Access Key ID",
         "High",
         "AWS Access Key ID Discovered: <b>$asset$</b><br><br><b>Note:</b> Before performing any active assessment of the identified asset, please check with the owner. The asset might not be owned by the same owner/organizaion or part of the scope."
-	],
-	[
-		"(SecretAccessKey|aws_secret_access_key)",
+    ],
+    [
+        "(SecretAccessKey|aws_secret_access_key)",
         "Asset Discovered: AWS Secret Access Key ID",
         "High",
         "AWS Secret Access Key ID Discovered: <b>$asset$</b><br><br><b>Note:</b> Before performing any active assessment of the identified asset, please check with the owner. The asset might not be owned by the same owner/organizaion or part of the scope."
-	]
+    ]
 ]
