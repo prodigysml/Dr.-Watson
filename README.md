@@ -23,6 +23,12 @@ Dr. Watson takes regexes from the issues_library.json file and attempts to match
 5. Click "Next"
 6. Enjoy the plugin!
 
+# How to Use The Plugin
+
+1. Install the plugin
+2. Add any domain you want analysed into scope (if not in scope, it will not be analysed, ensuring performance is not hindered immensely)
+3. Navigate / crawl through the website and observe the plugin creates issues for different resources identified. 
+
 # Authors and Thanks
 Originally written by Sajeeb Lohani ([sml555](https://twitter.com/sml555_)). I would like to thank the following for helping with the project:
 * BugCrowd HUNT for the Jython installation steps
