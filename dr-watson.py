@@ -186,7 +186,7 @@ class CustomScans:
                 elif (issuename == "Asset Discovered: Azure Blob"):
                     ref = ref.split(" ")[0].split('/')[2] + ":" + ref.split(" ")[0].split('/')[3]
 
-                # this was done to only keep a single issue created per for each ref
+                # this was done to only keep a single issue created for each ref
                 if not self.check_unique(base_url, ref):
                     continue
 
