@@ -1,14 +1,15 @@
-# Dr. Watson: Burp Suite Extension that helps you find assets, keys, and useful information. Your very own Burp side kick!
-# By: Sajeeb Lohani (sml555)
-# Twitter: https://twitter.com/sml555_
+"""
+Dr. Watson: Burp Suite Extension that helps you find assets, keys, and useful information. Your very own Burp side kick!
+By: Sajeeb Lohani (sml555)
+Twitter: https://twitter.com/sml555_
 
-# todo: fix dups better, add in api secrets, add in more JS parsing
+todo: fix dups better, add in api secrets, add in more JS parsing
 
-# Code Credits:
-# Redhunt Labs for making the original asset discovery plugin
-# OpenSecurityResearch CustomPassiveScanner: https://github.com/OpenSecurityResearch/CustomPassiveScanner
-# PortSwigger example-scanner-checks: https://github.com/PortSwigger/example-scanner-checks
-
+Code Credits:
+Redhunt Labs for making the original asset discovery plugin
+OpenSecurityResearch CustomPassiveScanner: https://github.com/OpenSecurityResearch/CustomPassiveScanner
+PortSwigger example-scanner-checks: https://github.com/PortSwigger/example-scanner-checks
+"""
 
 from burp import IBurpExtender
 from burp import IScannerCheck
@@ -17,15 +18,21 @@ from array import array
 import re
 import json
 
-# Implement BurpExtender to inherit from multiple base classes
-# IBurpExtender is the base class required for all extensions
-# IScannerCheck lets us register our extension with Burp as a custom scanner check
-class BurpExtender(IBurpExtender, IScannerCheck):
 
-    # The only method of the IBurpExtender interface.
-    # This method is invoked when the extension is loaded and registers
-    # an instance of the IBurpExtenderCallbacks interface
+class BurpExtender(IBurpExtender, IScannerCheck):
+    """
+    Implement BurpExtender to inherit from multiple base classes
+    IBurpExtender is the base class required for all extensions
+    IScannerCheck lets us register our extension with Burp as a custom scanner check
+    """
+
     def registerExtenderCallbacks(self, callbacks):
+        """
+        The only method of the IBurpExtender interface.
+        This method is invoked when the extension is loaded and registers
+        an instance of the IBurpExtenderCallbacks interface
+        """
+
         # Put the callbacks parameter into a class variable so we have class-level scope
         self._callbacks = callbacks
 
@@ -43,22 +50,24 @@ class BurpExtender(IBurpExtender, IScannerCheck):
 
         return
 
-    # This method is called when multiple issues are reported for the same URL
-    # In this case we are checking if the issue detail is different, as the
-    # issues from our scans include affected parameters/values in the detail,
-    # which we will want to report as unique issue instances
     def consolidateDuplicateIssues(self, existingIssue, newIssue):
-        if (existingIssue.getIssueDetail() == newIssue.getIssueDetail()):
+        """
+        This method is called when multiple issues are reported for the same URL
+        In this case we are checking if the issue detail is different, as the
+        issues from our scans include affected parameters/values in the detail,
+        which we will want to report as unique issue instances
+        """
+        if existingIssue.getIssueDetail() == newIssue.getIssueDetail():
             return -1
-        else:
-            return 0
+        return 0
 
-    # Implement the doPassiveScan method of IScannerCheck interface
-    # Burp Scanner invokes this method for each base request/response that is passively scanned.
     def doPassiveScan(self, baseRequestResponse):
+        """
+        Implement the doPassiveScan method of IScannerCheck interface
+        Burp Scanner invokes this method for each base request/response that is passively scanned.
+        """
         # Local variables used to store a list of ScanIssue objects
         scan_issues = list()
-        tmp_issues = list()
 
         # Create an instance of our CustomScans object, passing the
         # base request and response, and our callbacks object
@@ -74,18 +83,20 @@ class BurpExtender(IBurpExtender, IScannerCheck):
         print(mime_type)
 
         for issue in self.library:
-            scan_issues += self._CustomScans.findRegEx(issue[0], issue[1], issue[2], issue[3])
+            scan_issues += self._CustomScans.findRegEx(*issue[:4])
 
         # Finally, per the interface contract, doPassiveScan needs to return a
         # list of scan issues, if any, and None otherwise
-        if len(scan_issues) > 0:
+        if scan_issues:
             return scan_issues
         else:
             return None
 
+
 class CustomScans:
     unique_list = dict()
     regexes_compiled = dict()
+
     def __init__(self, requestResponse, callbacks):
         # Set class variables with the arguments passed to the constructor
         self._requestResponse = requestResponse
@@ -101,13 +112,15 @@ class CustomScans:
         self._params = self._helpers.analyzeRequest(requestResponse.getRequest()).getParameters()
         return
 
-    # This is a custom scan method to Look for all occurrences in the response
-    # that match the passed regular expression
     def findRegEx(self, regex, issuename, issuelevel, issuedetail):
+        """
+        This is a custom scan method to Look for all occurrences in the response
+        that match the passed regular expression
+        """
         scan_issues = []
         offset = array('i', [0, 0])
         response = self._requestResponse.getResponse()
-        responseLength = len(response)
+        response_length = len(response)
 
         # Only check responses for 'in scope' URLs
 
@@ -115,7 +128,7 @@ class CustomScans:
 
             # Compile the regular expression, telling Python to ignore EOL/LF
             # NOTE: testing required significantly here!
-            if CustomScans.regexes_compiled.has_key(regex):
+            if regex in CustomScans.regexes_compiled:
                 myre = CustomScans.regexes_compiled[regex]
             else:
                 myre = re.compile(regex, re.DOTALL)
@@ -135,7 +148,7 @@ class CustomScans:
                 # the offset needed to apply appropriate markers in the resulting Scanner issue
                 offsets = []
                 start = self._helpers.indexOf(response,
-                                    ref, True, 0, responseLength)
+                                              ref, True, 0, response_length)
                 offset[0] = start
                 offset[1] = start + len(ref)
                 offsets.append(offset)
@@ -147,18 +160,19 @@ class CustomScans:
 
                 # create individual classes per unique asset class
 
-                if (issuename == "Asset Discovered: Domain"):
+                if issuename == "Asset Discovered: Domain":
                     ref = ref.split("//")[-1].split("/")[0].split('?')[0]
                     if ref.endswith("." + self._get_core_domain(url)):
                         continue
 
-                elif (issuename == "Asset Discovered: IP"):
+                elif issuename == "Asset Discovered: IP":
                     ref_array = ref.split(".")
                     must_continue = False
-                    for i in ref_array:
+                    for s in ref_array:
                         # checks to see if 0 is in front of the ip number, 
                         # > 255 or < 0
-                        if int(i) > 255 or int(i) < 0 or i != str(int(i)):
+                        i = int(s)
+                        if not (0 < i < 255) or i or s != str(i):
                             must_continue = True
                             break
 
@@ -168,22 +182,22 @@ class CustomScans:
                     if must_continue:
                         continue
 
-                elif (issuename == "Asset Discovered: Subdomain"):
+                elif issuename == "Asset Discovered: Subdomain":
                     ref = ref.split("//")[-1].split("/")[0].split('?')[0]
                     coredomain = self._get_core_domain(url)
                     if not ref.endswith("." + coredomain) or ref == coredomain:
                         continue
 
-                elif (issuename == "Asset Discovered: S3 Bucket"):
+                elif issuename == "Asset Discovered: S3 Bucket":
                     try:
                         # getting the S3 bucket name and catch exception if regex catches incorrect data
                         ref = ref.split(" ")[0].split('/')[2]
                     except:
                         continue
-                elif (issuename == "Asset Discovered: DigitalOcean Space"):
+                elif issuename == "Asset Discovered: DigitalOcean Space":
                     ref = ref.split('/')[2]
 
-                elif (issuename == "Asset Discovered: Azure Blob"):
+                elif issuename == "Asset Discovered: Azure Blob":
                     ref = ref.split(" ")[0].split('/')[2] + ":" + ref.split(" ")[0].split('/')[3]
 
                 # this was done to only keep a single issue created for each ref
@@ -195,7 +209,7 @@ class CustomScans:
                     [self._callbacks.applyMarkers(self._requestResponse, None, offsets)],
                     issuename, issuelevel, issuedetail.replace("$asset$", ref)))
 
-        return (scan_issues)
+        return scan_issues
 
     def _get_core_domain(self, url):
         domain = str(url).split("//")[-1].split(":")[0].split('?')[0]
@@ -211,8 +225,12 @@ class CustomScans:
             CustomScans.unique_list[core] = [ref]
             return True
 
-# Implementation of the IScanIssue interface with simple constructor and getter methods
+
 class ScanIssue(IScanIssue):
+    """
+    Implementation of the IScanIssue interface with simple constructor and getter methods
+    """
+
     def __init__(self, httpservice, url, requestresponsearray, name, severity, detailmsg):
         self._url = url
         self._httpservice = httpservice
