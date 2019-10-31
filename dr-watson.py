@@ -17,6 +17,7 @@ from burp import IScanIssue
 from array import array
 import re
 import json
+import __version__
 
 
 class BurpExtender(IBurpExtender, IScannerCheck):

@@ -2,7 +2,7 @@
 
 Dr. Watson is a simple Burp Suite extension that helps find assets, keys, subdomains, IP addresses, and other useful information! It's your very own discovery side kick, the Dr. Watson to your Sherlock! 
 
-[![License](https://img.shields.io/badge/license-GPL3-_red.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html) [![Twitter](https://img.shields.io/badge/twitter-@sml555__-blue.svg)](https://twitter.com/sml555_) ![Version](https://img.shields.io/badge/version-1.0.1-blue.svg)
+[![License](https://img.shields.io/badge/license-GPL3-_red.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html) [![Twitter](https://img.shields.io/badge/twitter-@sml555__-blue.svg)](https://twitter.com/sml555_) ![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)
 
 # How Does Dr. Watson Work?
 
@@ -28,6 +28,9 @@ Dr. Watson takes regexes from the issues_library.json file and attempts to match
 1. Install the plugin
 2. Add any domain you want analysed into scope (if not in scope, it will not be analysed, ensuring performance is not hindered immensely)
 3. Navigate / crawl through the website and observe the plugin creates issues for different resources identified. 
+
+# Update Checker
+Please note that Dr. Watson will automatically check for updates when first loaded. Updates are checked for using the __version__.py file within the repository. There is a timeout set, alongside error handling for this feature (in case users are on an internal network or don't currently have access to github.com). 
 
 # Authors and Thanks
 Originally written by Sajeeb Lohani ([sml555](https://twitter.com/sml555_)). I would like to thank the following for helping with the project:
