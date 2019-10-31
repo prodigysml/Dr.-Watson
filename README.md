@@ -29,6 +29,9 @@ Dr. Watson takes regexes from the issues_library.json file and attempts to match
 2. Add any domain you want analysed into scope (if not in scope, it will not be analysed, ensuring performance is not hindered immensely)
 3. Navigate / crawl through the website and observe the plugin creates issues for different resources identified. 
 
+# Update Checker
+Please note that Dr. Watson will automatically check for updates when first loaded. Updates are checked for using the __version__.py file within the repository. There is a timeout set, alongside error handling for this feature (in case users are on an internal network or don't currently have access to github.com). 
+
 # Authors and Thanks
 Originally written by Sajeeb Lohani ([sml555](https://twitter.com/sml555_)). I would like to thank the following for helping with the project:
 * BugCrowd HUNT for the Jython installation steps
